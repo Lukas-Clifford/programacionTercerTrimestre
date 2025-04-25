@@ -1,17 +1,16 @@
-package BBDD2JAVA;
-
 import java.sql.*;
 
 public class Controller {
 
     Connection conn = null;
-
+    // Custom Exception
     public class NotSelectQuery extends Exception{
         private NotSelectQuery(String msg){
             super(msg);
         }
     }
 
+    // Starting and closing the connection
     public Controller (String user,String pass){
 
         try {
@@ -22,7 +21,7 @@ public class Controller {
 
             // Making the connection
             this.conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/Aucorsa?user=root",
+                    "jdbc:mysql://localhost:3306/aucorsa?user=root",
                     user, pass
             );
 
@@ -51,16 +50,18 @@ public class Controller {
 
     }
 
+    // Generic update for later use
     private void executeUpdate (String query) throws SQLException {
 
         Statement s = this.conn.createStatement();
 
-        System.out.println("Update finished with exit code " + s.executeUpdate(query));
+        System.out.println("Lines updated: " + s.executeUpdate(query));
 
         s.close();
 
     }
 
+    // Methods to insert into the 4 different tables
     public void insertBus(String register, String type, String license) {
 
         try {
@@ -120,7 +121,6 @@ public class Controller {
 
     }
 
-
     public void insertRoute(String register, int numDriver, int idPlace, String dayOfTheWeek) {
 
         try {
@@ -140,10 +140,10 @@ public class Controller {
 
     }
 
-
-    public void updateDayOfWeek(int numDriver, String dayOfWeek){
+    // Specific actions that the exercise requires
+    public void updateByDayOfWeek(int numDriver, String dayOfWeek){
         // "Update routes for day of the week"
-        // this method changes only de numdriver of
+        // this method changes only the numdriver of
         // routes that have that day of week
 
         try {
@@ -186,6 +186,7 @@ public class Controller {
 
     }
 
+    // A method that only accepts Select queries
     public void executeSelectQuery (String query) throws NotSelectQuery {
         if (!query.split(" ")[0].equalsIgnoreCase("SELECT"))
             throw new NotSelectQuery("Query does not start with SELECT");
@@ -222,49 +223,7 @@ public class Controller {
         }
 
     }
-    
-    
-    
-    public String getDriverName(int numdriver) {
 
-        String nombre = null;
-    	try {
-            Statement s = this.conn.createStatement();
-
-            ResultSet result = s.executeQuery(
-            		"SELECT name, surname FROM Driver WHERE numdriver = " + numdriver
-            		);
-            
-            result.next();
-            nombre = result.getString(1) + " " + result.getString(2);
-            
-            result.close(); s.close();
-
-
-        } catch (SQLException e) {
-
-            System.out.println("An error occurred when executing a SELECT query: ");
-            e.printStackTrace();
-
-		}
-    	return nombre;
-    }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
 }
 

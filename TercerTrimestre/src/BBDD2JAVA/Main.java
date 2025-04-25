@@ -1,26 +1,43 @@
-package BBDD2JAVA;
-
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 public class Main {
+
+
     public static void main(String[] args) {
 
-        Controller controller = new Controller("root","");
+        Controller controller = new Controller(getProperty("user"),getProperty("pass"));
 
 
-//        insertValues(controller);
+        insertValues(controller);
 
+        update(controller);
 
-//        update(controller);
-
-
-//        deleteRoute(controller);
-
+        deleteRoute(controller);
 
         querys(controller);
 
-
         controller.closeConnection();
 
+    }
+    
+    private static String getProperty(String propertyName) {
+
+        String propertyValue = "";
+
+        try {
+
+            Properties properties = new Properties();
+
+            properties.load(new FileInputStream("src/data.properties"));
+
+            propertyValue = properties.getProperty(propertyName);
+
+
+        } catch (IOException e) {e.printStackTrace();}
+
+        return propertyValue;
     }
 
     private static void querys(Controller controller) {
@@ -31,7 +48,7 @@ public class Main {
 
             controller.executeSelectQuery(
                 "SELECT numdriver, name, surname " +
-                    "FROM Driver " +
+                    "FROM driver " +
                     "WHERE numdriver = " + numdriver
             );
 
@@ -43,9 +60,9 @@ public class Main {
 
             controller.executeSelectQuery(
                 "SELECT day_of_week " +
-                    "FROM BDP " +
-                    "JOIN Place USING(idplace) " +
-                    "WHERE Place.city = " + city
+                    "FROM bdp " +
+                    "JOIN place USING(idplace) " +
+                    "WHERE place.city = " + city
             );
 
             System.out.println();
@@ -56,9 +73,9 @@ public class Main {
 
             controller.executeSelectQuery(
                 "SELECT numdriver, name, surname " +
-                    "FROM Driver " +
-                    "JOIN BDP USING (numdriver) " +
-                    "JOIN Bus USING (register) " +
+                    "FROM driver " +
+                    "JOIN bdp USING (numdriver) " +
+                    "JOIN bus USING (register) " +
                     "WHERE register = " + register
             );
 
@@ -83,7 +100,7 @@ public class Main {
 
     private static void update(Controller controller) {
 
-        controller.updateDayOfWeek(111,"Monday");
+        controller.updateByDayOfWeek(111,"Monday");
 
     }
 
