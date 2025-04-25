@@ -1,19 +1,21 @@
 package aucorsa;
 
-import aucorsa.dataBaseConnection.DBController;
-import aucorsa.dataBaseConnection.objects.Driver;
+import aucorsa.GUI.GUIController;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		DBController c = new DBController();
-		c.createConection("Aucorsa");
+//		Dao dao = new Dao();
+//		dao.createConection("Aucorsa");
+//		
+//		Driver driver = dao.getDriver(101);
+//		System.out.println(driver);
+//		
+//		dao.closeConnection();
 		
-		Driver driver = c.getDriver(101);
-		System.out.println(driver);
+		GUIController controller = new GUIController();
 		
-		c.closeConnection();
 		
 	}
 
